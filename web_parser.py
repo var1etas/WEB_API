@@ -22,7 +22,6 @@ class Product(Base):
 
 Base.metadata.create_all(bind=engine)
 
-# Pydantic модели
 class ProductBase(BaseModel):
     name: str
     price: str
@@ -63,7 +62,7 @@ def fetch_products():
 
 def save_products_to_db(products):
     session = SessionLocal()
-    session.query(Product).delete()  # Очистка таблицы
+    session.query(Product).delete()
     for product in products:
         new_product = Product(name=product["name"], price=product["price"])
         session.add(new_product)
@@ -74,7 +73,6 @@ def parse_and_save():
     products = fetch_products()
     save_products_to_db(products)
 
-# Эндпоинты
 @app.get("/products", response_model=List[ProductResponse])
 def get_products():
     session = SessionLocal()
